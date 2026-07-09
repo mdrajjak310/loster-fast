@@ -3,52 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loster Fast - Earn Crypto</title>
+    <title>Loster Fast</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Adsgram SDK -->
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
-    <!-- Propeller/Libtl SDK -->
     <script src='//libtl.com/sdk.js' data-zone='11260099' data-sdk='show_11260099'></script>
 </head>
 <body>
-
 <div class="app-container">
     <header class="app-header">
-        <div class="logo-area">
-            <h2>Loster Fast</h2>
-            <span>Earn Crypto</span>
-        </div>
-        <div class="balance-badge">
-            <span id="user-balance">0</span> <span class="coin-txt">Coins</span>
-        </div>
+        <div><h2>Loster Fast</h2></div>
+        <div><span id="user-balance">0</span> Coins</div>
     </header>
-
     <main class="main-content">
         <section id="spin-section" class="tab-content active">
             <div class="section-card">
-                <div class="wheel-box"><canvas id="wheel-canvas" width="300" height="300"></canvas></div>
-                <div class="wheel-controls">
-                    <p>Available Spins: <span id="spin-count">0</span></p>
-                    <button id="spin-btn" class="action-btn" onclick="triggerSpin()">SPIN NOW</button>
-                    <button class="ad-btn" onclick="watchVideoForSpin()">🎬 Watch Video (+1 Spin)</button>
-                </div>
+                <h3>Available Spins: <span id="spin-count">0</span></h3>
+                <button class="action-btn" onclick="triggerSpin()">SPIN NOW</button>
+                <button class="ad-btn" onclick="watchVideoForSpin()">🎬 Watch Video (+1 Spin)</button>
             </div>
         </section>
-
         <section id="tasks-section" class="tab-content">
-            <div class="task-card">
-                <p>Today's Videos: <span id="video-count">0</span></p>
-                <button class="action-btn" onclick="watchTaskVideo()">📺 Watch Video & Earn</button>
+            <div class="section-card">
+                <h3>Video Tasks</h3>
+                <button class="action-btn" onclick="watchTaskVideo()">📺 Watch Task Video</button>
             </div>
         </section>
     </main>
-
     <nav class="bottom-nav">
-        <button class="nav-item active" onclick="switchTab('spin-section')">🎮 Spin</button>
+        <button class="nav-item" onclick="switchTab('spin-section')">🎮 Spin</button>
         <button class="nav-item" onclick="switchTab('tasks-section')">📺 Tasks</button>
     </nav>
 </div>
-
 <script src="script.js"></script>
 </body>
 </html>
