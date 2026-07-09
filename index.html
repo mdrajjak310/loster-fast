@@ -6,6 +6,8 @@
     <title>Loster Fast - Earn Crypto</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Monetag SDK -->
+    <script src='//libtl.com/sdk.js' data-zone='11260099' data-sdk='show_11260099'></script>
 </head>
 <body>
     <div class="app-container">
@@ -22,7 +24,7 @@
 
         <nav class="bottom-nav">
             <button class="nav-item active" onclick="switchTab('spin-section')">🎮 Spin</button>
-            <button class="nav-item" onclick="switchTab('tasks-section')">📺 Tasks</button>
+            <button class="nav-item" onclick="switchTab('tasks-section')">💼 Tasks</button>
             <button class="nav-item" onclick="switchTab('withdraw-section')">💰 Cashout</button>
             <button class="nav-item" onclick="switchTab('invite-section')">👥 Invite</button>
         </nav>
@@ -58,47 +60,62 @@
 
             <section id="withdraw-section" class="tab-content">
                 <div class="section-title">
-                    <h3>Fast Cashout</h3>
+                    <h3>Cashout</h3>
                     <p>Processed within 3 to 6 hours.</p>
                 </div>
                 <div class="withdraw-card">
                     <div class="method-info">
                         <img src="https://cdn-icons-png.flaticon.com/512/825/825540.png" alt="binance" class="gateway-icon">
-                        <div>
-                            <h4>Binance Pay</h4>
-                            <p class="min-payout">Min: 5000 Coins</p>
-                        </div>
+                        <h4>Binance Pay</h4>
+                        <p class="min-payout">Min: 5000 Coins</p>
                     </div>
                     <button class="withdraw-btn" onclick="openWithdrawForm('Binance Pay')">Withdraw</button>
                 </div>
                 <div class="withdraw-card">
                     <div class="method-info">
-                        <img src="https://cdn-icons-png.flaticon.com/512/6001/6001354.png" alt="faucetpay" class="gateway-icon">
-                        <div>
-                            <h4>FaucetPay</h4>
-                            <p class="min-payout">Min: 2000 Coins</p>
-                        </div>
+                        <img src="https://cdn-icons-png.flaticon.com/512/10013/10013990.png" alt="bkn" class="gateway-icon">
+                        <h4>bKash / Nagad</h4>
+                        <p class="min-payout">Min: 2000 Coins</p>
                     </div>
-                    <button class="withdraw-btn" onclick="openWithdrawForm('FaucetPay')">Withdraw</button>
+                    <button class="withdraw-btn" onclick="openWithdrawForm('bKash/Nagad')">Withdraw</button>
                 </div>
             </section>
 
             <section id="invite-section" class="tab-content">
                 <div class="section-title">
-                    <h3>Invite Friends</h3>
-                    <p>Earn <strong style="color: #00ff88;">5% Commission</strong></p>
+                    <h3>Invite Friends & Earn</h3>
+                    <p>Get <strong>0.5% Lifetime Commission</strong> from everything your friend earns.</p>
                 </div>
-                <div class="invite-box">
-                    <p class="invite-label">Your Unique Referral Link:</p>
-                    <div class="link-row">
-                        <input type="text" id="ref-link" value="t.me/LosterFast_bot/app?startapp=12345" readonly>
-                        <button onclick="copyRefLink()">Copy</button>
+                <div class="invite-card">
+                    <div class="invite-input-box">
+                        <input type="text" id="invite-link-field" readonly value="https://t.me/your_bot_name/start?start=user123">
+                        <button class="copy-btn" onclick="copyInviteLink()">Copy</button>
                     </div>
-                    <p class="ref-stats">Total Invited: <span id="total-refs">0</span></p>
+                    <p class="invite-stats">Total Invited: <strong id="referred-count">0</strong></p>
                 </div>
             </section>
         </main>
     </div>
+
+    <!-- Payout Modal -->
+    <div id="withdraw-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="modal-title">Withdraw</h3>
+            <div class="input-group">
+                <label for="payout-address">Enter Account / Pay ID:</label>
+                <input type="text" id="payout-address" placeholder="e.g. Binance Pay ID or Wallet">
+            </div>
+            <div class="input-group">
+                <label for="payout-amount">Amount (Coins):</label>
+                <input type="number" id="payout-amount" placeholder="Minimum amount required">
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeWithdrawForm()">Cancel</button>
+                <button class="btn-submit" onclick="submitWithdrawal()">Submit Request</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
-                                                                  </html>
+</html>
