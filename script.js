@@ -122,8 +122,8 @@ function watchTaskVideo() {
     show_11260099().then((result) => {
         // বিজ্ঞাপন সফলভাবে দেখা হলে এই অংশটি রান করবে
         completedVideos += 1;
-        userBalance += 15;
-        alert("✔️ Video task complete! +15 Coins added.");
+        userBalance += 25;
+        alert("✔️ Video task complete! +25 Coins added.");
         updateUI();
     }).catch((error) => {
         // বিজ্ঞাপন ফেইল হলে, রিজেক্ট হলে বা টাইম-আউট হলে এখানে আসবে
