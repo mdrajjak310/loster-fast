@@ -1,336 +1,150 @@
-ঝconst tg = window.Telegram.WebApp;
+const tg = window.Telegram.WebApp;
 tg.expand();
 
-// AdsGram
-const AdController = window.Adsgram.init({
-    blockId: "37806"
-});
-
-// User Data
 let userBalance = 0;
 let availableSpins = 3;
 let completedVideos = 0;
-let totalRefs = 0;
 
-// Wheel
+document.addEventListener("DOMContentLoaded", function() {
+    if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        document.getElementById('username').innerText = `@${tg.initDataUnsafe.user.username || tg.initDataUnsafe.user.first_name}`;
+    }
+    updateUI();
+    initWheel();
+});
+
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    const activeBtn = Array.from(document.querySelectorAll('.nav-item')).find(btn => btn.getAttribute('onclick').includes(tabId));
+    if (activeBtn) activeBtn.classList.add('active');
+}
+
+function updateUI() {
+    document.getElementById('user-balance').innerText = userBalance;
+    document.getElementById('spin-count').innerText = availableSpins;
+    document.getElementById('video-count').innerText = completedVideos;
+    document.getElementById('spin-btn').disabled = availableSpins <= 0;
+}
+
 const canvas = document.getElementById("wheel-canvas");
-let ctx;
-let startAngle = 0;
-let arcSize;
-let isSpinning = false;
-
-// Wheel Items
+let ctx, arcSize, startAngle = 0, isSpinning = false;
 const sectors = [
- {text:"10",color:"#00c8ff",reward:10},
- {text:"15",color:"#00ff88",reward:15},
- {text:"20",color:"#ffd93d",reward:20},
- {text:"25",color:"#8b5cf6",reward:25},
- {text:"MISS",color:"#222",reward:0},
- {text:"10",color:"#ff4d4d",reward:10},
- {text:"15",color:"#ffffff",reward:15},
- {text:"20",color:"#3b82f6",reward:20},
- {text:"25",color:"#16a34a",reward:25},
- {text:"MISS",color:"#000000",reward:0}
+    { amount: 5, color: "#14142b" },
+    { amount: 15, color: "#8a2be2" },
+    { amount: 50, color: "#00e5ff" },
+    { amount: 0, color: "#222244" },
+    { amount: 100, color: "#00ff88" },
+    { amount: 20, color: "#ff0055" }
 ];
 
-document.addEventListener("DOMContentLoaded",()=>{
-
-if(tg.initDataUnsafe.user){
-
-document.getElementById("username").innerHTML=
-"@"+(tg.initDataUnsafe.user.username ||
-tg.initDataUnsafe.user.first_name);
-
+function initWheel() {
+    if (!canvas) return;
+    ctx = canvas.getContext("2d");
+    arcSize = (2 * Math.PI) / sectors.length;
+    drawWheel();
 }
 
-ctx=canvas.getContext("2d");
-
-arcSize=(2*Math.PI)/sectors.length;
-
-drawWheel();
-
-updateUI();
-
-});
-function drawWheel(){
-
-ctx.clearRect(0,0,320,320);
-
-for(let i=0;i<sectors.length;i++){
-
-let angle=startAngle+i*arcSize;
-
-ctx.beginPath();
-
-ctx.moveTo(160,160);
-
-ctx.arc(160,160,150,angle,angle+arcSize);
-
-ctx.closePath();
-
-ctx.fillStyle=sectors[i].color;
-
-ctx.fill();
-
-ctx.strokeStyle="#111";
-
-ctx.lineWidth=2;
-
-ctx.stroke();
-
-ctx.save();
-
-ctx.translate(160,160);
-
-ctx.rotate(angle+arcSize/2);
-
-ctx.fillStyle="#fff";
-
-ctx.font="bold 18px Arial";
-
-ctx.textAlign="right";
-
-ctx.fillText(sectors[i].text,130,5);
-
-ctx.restore();
-
-}
-
-
-function triggerSpin(){
-
-if(isSpinning) return;
-
-if(availableSpins<=0){
-
-alert("No Spins Left");
-
-return;
-
-}
-
-availableSpins--;
-
-updateUI();
-
-isSpinning=true;
-
-let randomSector=Math.floor(Math.random()*sectors.length);
-
-let spins=6;
-
-let stopAngle=(3*Math.PI/2)
-
--(randomSector*arcSize)
-
--(arcSize/2);
-
-let totalRotate=(spins*2*Math.PI)+stopAngle-startAngle;
-
-let duration=5000;
-
-let start=null;
-
-let initial=startAngle;
-
-function animate(time){
-
-if(!start) start=time;
-
-let progress=(time-start)/duration;
-
-if(progress>1) progress=1;
-
-let ease=1-Math.pow(1-progress,3);
-
-startAngle=initial+(totalRotate*ease);
-
-drawWheel();
-
-if(progress<1){
-
-requestAnimationFrame(animate);
-
-}else{
-
-isSpinning=false;
-
-let reward=sectors[randomSector].reward;
-
-if(reward>0){
-
-userBalance+=reward;
-
-alert("🎉 You won "+reward+" Coins");
-
-}else{
-
-alert("😢 MISS");
-
-}
-
-updateUI();
-
-}
-
-
-requestAnimationFrame(animate);
-
-}
-function watchVideoForSpin(){
-
-show_11260099().then(()=>{
-
-availableSpins++;
-
-alert("🎉 +1 Spin Added");
-
-updateUI();
-
-}).catch(()=>{
-
-alert("❌ Ad not completed.");
-
-});
-
-}
-
-function watchTaskVideo(){
-
-show_11260099().then(()=>{
-
-completedVideos++;
-
-userBalance+=15;
-
-alert("✅ +15 Coins Earned");
-
-updateUI();
-
-}).catch(()=>{
-
-alert("❌ Ad not completed.");
-
-});
-
-}
-
-function claimDailyBonus(){
-
-show_11260099().then(()=>{
-
-userBalance+=25;
-
-alert("🎁 Daily Bonus +25 Coins");
-
-updateUI();
-
-}).catch(()=>{
-
-alert("❌ Ad not completed.");
-
-});
-
-}
-
-function updateUI(){
-
-document.getElementById("user-balance").innerHTML=userBalance;
-
-document.getElementById("spin-count").innerHTML=availableSpins;
-
-document.getElementById("video-count").innerHTML=completedVideos;
-
-const wb=document.getElementById("withdraw-balance");
-if(wb){
-wb.innerHTML=userBalance;
-}
-
-const spinBtn=document.getElementById("spin-btn");
-
-if(spinBtn){
-
-spinBtn.disabled=availableSpins<=0;
-
-}
-
-function openWithdrawForm(gateway){
-
-    if(userBalance < 1000){
-        alert("❌ Minimum Withdraw is 1000 Coins");
-        return;
+function drawWheel() {
+    ctx.clearRect(0, 0, 300, 300);
+    for (let i = 0; i < sectors.length; i++) {
+        let angle = startAngle + i * arcSize;
+        ctx.fillStyle = sectors[i].color;
+        ctx.beginPath();
+        ctx.moveTo(150, 150);
+        ctx.arc(150, 150, 140, angle, angle + arcSize);
+        ctx.lineTo(150, 150);
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255,255,255,0.1)";
+        ctx.stroke();
+        
+        ctx.save();
+        ctx.translate(150, 150);
+        ctx.rotate(angle + arcSize / 2);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 14px sans-serif";
+        ctx.textAlign = "right";
+        ctx.fillText(sectors[i].amount === 0 ? "Miss" : sectors[i].amount, 120, 5);
+        ctx.restore();
     }
+}
 
-    let address = prompt(
-        gateway === "Binance"
-        ? "Enter Binance Pay ID"
-        : "Enter FaucetPay Email"
-    );
-
-    if(address==null || address==""){
-        return;
-    }
-
-    alert(
-        "✅ Withdraw Request Submitted\n\n" +
-        "Gateway : " + gateway +
-        "\nAmount : 1000 Coins" +
-        "\nStatus : Pending"
-    );
-
-    userBalance -= 1000;
-
+function triggerSpin() {
+    if (isSpinning || availableSpins <= 0) return;
+    isSpinning = true;
+    availableSpins--;
     updateUI();
+    
+    let extraSpins = Math.floor(Math.random() * 5) + 5;
+    let targetSector = Math.floor(Math.random() * sectors.length);
+    let stopAngle = (3 * Math.PI / 2) - (targetSector * arcSize) - (arcSize / 2);
+    let totalRotation = stopAngle + (extraSpins * 2 * Math.PI) - startAngle;
+    
+    let duration = 4000, startTime = null, initialAngle = startAngle;
 
-}
-
-function copyRefLink(){
-
-    let link=document.getElementById("ref-link");
-
-    navigator.clipboard.writeText(link.value);
-
-    alert("✅ Referral Link Copied");
-
-}
-
-function shareReferral(){
-
-    if(navigator.share){
-
-        navigator.share({
-
-            title:"LOSTER FAST",
-
-            text:"Join LOSTER FAST and earn USDT!",
-
-            url:document.getElementById("ref-link").value
-
-        });
-
-    }else{
-
-        copyRefLink();
-
+    function animateWheel(timestamp) {
+        if (!startTime) startTime = timestamp;
+        let elapsed = timestamp - startTime;
+        let progress = Math.min(elapsed / duration, 1);
+        let easeOut = 1 - Math.pow(1 - progress, 3);
+        
+        startAngle = initialAngle + totalRotation * easeOut;
+        drawWheel();
+        
+        if (progress < 1) {
+            requestAnimationFrame(animateWheel);
+        } else {
+            isSpinning = false;
+            let winAmount = sectors[targetSector].amount;
+            if (winAmount > 0) {
+                userBalance += winAmount;
+                alert(`🎉 Congratulations! You won ${winAmount} Coins!`);
+            } else {
+                alert(`😢 Better luck next time!`);
+            }
+            updateUI();
+        }
     }
+    requestAnimationFrame(animateWheel);
+}
 
+function watchVideoForSpin() {
+    alert("🎬 Loading Advertisement Video...");
+    setTimeout(() => {
+        availableSpins += 1;
+        alert("✅ Ad Finished! You earned +1 Spin.");
+        updateUI();
+    }, 3000);
+}
 
-function switchTab(tab){
+function watchTaskVideo() {
+    alert("📺 Loading Task Video Ad...");
+    setTimeout(() => {
+        completedVideos += 1;
+        userBalance += 15;
+        alert("✅ Video task complete! +15 Coins added.");
+        updateUI();
+    }, 3000);
+}
 
-document.querySelectorAll(".tab-content").forEach(e=>{
+function openWithdrawForm(gateway) {
+    let minAmount = gateway === 'FaucetPay' ? 2000 : 5000;
+    if (userBalance < minAmount) {
+        alert(`❌ Minimum limit for ${gateway} is ${minAmount} Coins.`);
+        return;
+    }
+    let userAddress = prompt(`Enter your ${gateway} Email or Pay ID:`);
+    if (userAddress) {
+        userBalance -= minAmount;
+        alert(`🚀 Payout Request Submitted!\nStatus: Processing (3-6 Hours)`);
+        updateUI();
+    }
+}
 
-e.classList.remove("active");
-
-});
-
-document.getElementById(tab).classList.add("active");
-
-document.querySelectorAll(".nav-item").forEach(btn=>{
-
-btn.classList.remove("active");
-
-});
-
-event.target.classList.add("active");
-
+function copyRefLink() {
+    const copyText = document.getElementById("ref-link");
+    copyText.select();
+    navigator.clipboard.writeText(copyText.value);
+    alert("📋 Referral link copied!");
 }
