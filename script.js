@@ -119,13 +119,17 @@ function watchVideoForSpin() {
 }
 
 function watchTaskVideo() {
-    show_11260099();
-    setTimeout(() => {
+    show_11260099().then((result) => {
+        // বিজ্ঞাপন সফলভাবে দেখা হলে এই অংশটি রান করবে
         completedVideos += 1;
         userBalance += 15;
-        alert("✅ Video task complete! +15 Coins added.");
+        alert("✔️ Video task complete! +15 Coins added.");
         updateUI();
-    }, 3000);
+    }).catch((error) => {
+        // বিজ্ঞাপন ফেইল হলে, রিজেক্ট হলে বা টাইম-আউট হলে এখানে আসবে
+        console.error("Ad failed, rejected, or timed out", error);
+        alert("❌ Ad failed to load. Please try again.");
+    });
 }
 
 function openWithdrawForm(gateway) {
