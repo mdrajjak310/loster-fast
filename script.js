@@ -1,4 +1,4 @@
-const tg = window.Telegram.WebApp;
+ঝconst tg = window.Telegram.WebApp;
 tg.expand();
 
 // AdsGram
@@ -96,7 +96,6 @@ ctx.restore();
 
 }
 
-}
 
 function triggerSpin(){
 
@@ -174,7 +173,6 @@ updateUI();
 
 }
 
-}
 
 requestAnimationFrame(animate);
 
@@ -316,7 +314,6 @@ function shareReferral(){
 
     }
 
-}
 
 function switchTab(tab){
 
