@@ -1,423 +1,104 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loster Fast</title>
+    <title>Loster Fast - Earn Crypto</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
-    <script src='//libtl.com/sdk.js' data-zone='11260099' data-sdk='show_11260099'></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-<div class="app-container">
-    <header class="app-header">
-        <div><h2>Loster Fast</h2></div>
-        <div><span id="user-balance">0</span> Coins</div>
-    </header>
-    <main class="main-content">
-        <!-- ================= SPIN SECTION ================= -->
-
-<section id="spin-section" class="tab-content active">
-
-<div class="section-card">
-
-<div class="wheel-box">
-
-<div class="wheel-pointer"></div>
-
-<canvas
-id="wheel-canvas"
-width="320"
-height="320">
-</canvas>
-
-</div>
-
-<div class="wheel-controls">
-
-<p class="status-text">
-
-Available Spins :
-<span id="spin-count">3</span>
-
-</p>
-
-<button
-id="spin-btn"
-class="action-btn"
-onclick="triggerSpin()">
-
-🎡 SPIN NOW
-
-</button>
-
-<button
-class="ad-btn"
-onclick="watchVideoForSpin()">
-
-🎬 Watch Ad (+1 Spin)
-
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- ================= END SPIN SECTION ================= -->
-        <!-- ================= TASKS SECTION ================= -->
-
-<section id="tasks-section" class="tab-content">
-
-<div class="section-title">
-<h3>📺 Video Tasks</h3>
-<p>Watch ads and earn coins instantly.</p>
-</div>
-
-<div class="task-card">
-
-<div class="task-progress-container">
-
-<span>
-Today's Videos :
-<strong id="video-count">0</strong>
-</span>
-
-<span class="badge-blue">
-+15 Coins
-</span>
-
-</div>
-
-<button
-class="action-btn-large"
-onclick="watchTaskVideo()">
-
-📺 Watch Video & Earn
-
-</button>
-
-</div>
-
-<div class="task-card">
-
-<h3>🎁 Daily Bonus</h3>
-
-<p>Claim your daily reward every 24 hours.</p>
-
-<br>
-
-<button
-class="action-btn-large"
-onclick="claimDailyBonus()">
-
-🎁 Claim Daily Bonus
-
-</button>
-
-</div>
-
-<div class="task-card">
-
-<h3>🎡 Get Extra Spin</h3>
-
-<p>Watch a rewarded ad and get +1 Spin.</p>
-
-<br>
-
-<button
-class="action-btn-large"
-onclick="watchVideoForSpin()">
-
-🎬 Watch Rewarded Ad
-
-</button>
-
-</div>
-
-</section>
-        <!-- ================= WITHDRAW SECTION ================= -->
-
-<section id="withdraw-section" class="tab-content">
-
-<div class="section-title">
-<h3>💰 Withdraw</h3>
-<p>Minimum Withdraw : <b>1000 Coins</b></p>
-</div>
-
-<div class="withdraw-card">
-
-<div class="method-info">
-
-<img src="https://cdn-icons-png.flaticon.com/512/825/825540.png"
-class="gateway-icon">
-
-<div>
-
-<h4>Binance Pay</h4>
-
-<p class="min-payout">
-Minimum : 1000 Coins
-</p>
-
-</div>
-
-</div>
-
-<button
-class="withdraw-btn"
-onclick="openWithdrawForm('Binance')">
-
-Withdraw
-
-</button>
-
-</div>
-
-<div class="withdraw-card">
-
-<div class="method-info">
-
-<img src="https://cdn-icons-png.flaticon.com/512/6001/6001354.png"
-class="gateway-icon">
-
-<div>
-
-<h4>FaucetPay</h4>
-
-<p class="min-payout">
-Minimum : 1000 Coins
-</p>
-
-</div>
-
-</div>
-
-<button
-class="withdraw-btn"
-onclick="openWithdrawForm('FaucetPay')">
-
-Withdraw
-
-</button>
-
-</div>
-
-<div class="withdraw-card">
-
-<div class="method-info">
-
-<div>
-
-<h4>Balance</h4>
-
-<p class="min-payout">
-Current Coins :
-<span id="withdraw-balance">0</span>
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- ================= END WITHDRAW SECTION ================= -->
-        <!-- ================= REFERRAL SECTION ================= -->
-
-<section id="invite-section" class="tab-content">
-
-<div class="section-title">
-<h3>👥 Invite Friends</h3>
-<p>Earn <strong style="color:#00ff88;">5%</strong> Commission</p>
-</div>
-
-<div class="invite-box">
-
-<p class="invite-label">
-Your Referral Link
-</p>
-
-<div class="link-row">
-
-<input
-type="text"
-id="ref-link"
-value="https://t.me/LosterFast_bot?start="
-readonly>
-
-<button
-onclick="copyRefLink()">
-Copy
-</button>
-
-</div>
-
-<p class="ref-stats">
-
-👥 Total Referrals :
-<span id="total-refs">0</span>
-
-</p>
-
-<p class="ref-stats">
-
-💰 Referral Earnings :
-<span id="ref-earnings">0</span>
-Coins
-
-</p>
-
-<br>
-
-<button
-class="action-btn-large"
-onclick="shareReferral()">
-
-📤 Share Referral Link
-
-</button>
-
-</div>
-
-</section>
-
-<!-- ================= END REFERRAL SECTION ================= -->
-
-<!-- ================= END TASKS SECTION ================= -->
-    </main>
-    <nav class="bottom-nav">
-        <button class="nav-item" onclick="switchTab('spin-section')">🎮 Spin</button>
-        <button class="nav-item" onclick="switchTab('tasks-section')">📺 Tasks</button>
-    </nav>
-</div>
-<script src="script.js"></script>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo-area">
+                <h2>LOSTER FAST</h2>
+                <span id="username">@Player</span>
+            </div>
+            <div class="balance-badge">
+                <img src="https://cdn-icons-png.flaticon.com/512/272/272525.png" alt="coin" class="coin-icon">
+                <span id="user-balance">0</span> <span class="coin-txt">Coins</span>
+            </div>
+        </header>
+
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="switchTab('spin-section')">🎮 Spin</button>
+            <button class="nav-item" onclick="switchTab('tasks-section')">📺 Tasks</button>
+            <button class="nav-item" onclick="switchTab('withdraw-section')">💰 Cashout</button>
+            <button class="nav-item" onclick="switchTab('invite-section')">👥 Invite</button>
+        </nav>
+
+        <main class="main-content">
+            <section id="spin-section" class="tab-content active">
+                <div class="section-card">
+                    <div class="wheel-box">
+                        <div class="wheel-pointer"></div>
+                        <canvas id="wheel-canvas" width="300" height="300"></canvas>
+                    </div>
+                    <div class="wheel-controls">
+                        <p class="status-text">Available Spins: <span id="spin-count">0</span></p>
+                        <button id="spin-btn" class="action-btn" onclick="triggerSpin()" disabled>SPIN NOW</button>
+                        <button id="watch-ad-spin-btn" class="ad-btn" onclick="watchVideoForSpin()">🎬 Watch Video (+1 Spin)</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tasks-section" class="tab-content">
+                <div class="section-title">
+                    <h3>Unlimited Video Tasks</h3>
+                    <p>Watch videos to earn coins.</p>
+                </div>
+                <div class="task-card">
+                    <div class="task-progress-container">
+                        <span>Today's Videos: <strong id="video-count">0</strong></span>
+                        <span id="rate-badge" class="badge-blue">15 Coins / Video</span>
+                    </div>
+                    <button class="action-btn-large" onclick="watchTaskVideo()">📺 Watch Video & Earn</button>
+                </div>
+            </section>
+
+            <section id="withdraw-section" class="tab-content">
+                <div class="section-title">
+                    <h3>Fast Cashout</h3>
+                    <p>Processed within 3 to 6 hours.</p>
+                </div>
+                <div class="withdraw-card">
+                    <div class="method-info">
+                        <img src="https://cdn-icons-png.flaticon.com/512/825/825540.png" alt="binance" class="gateway-icon">
+                        <div>
+                            <h4>Binance Pay</h4>
+                            <p class="min-payout">Min: 5000 Coins</p>
+                        </div>
+                    </div>
+                    <button class="withdraw-btn" onclick="openWithdrawForm('Binance Pay')">Withdraw</button>
+                </div>
+                <div class="withdraw-card">
+                    <div class="method-info">
+                        <img src="https://cdn-icons-png.flaticon.com/512/6001/6001354.png" alt="faucetpay" class="gateway-icon">
+                        <div>
+                            <h4>FaucetPay</h4>
+                            <p class="min-payout">Min: 2000 Coins</p>
+                        </div>
+                    </div>
+                    <button class="withdraw-btn" onclick="openWithdrawForm('FaucetPay')">Withdraw</button>
+                </div>
+            </section>
+
+            <section id="invite-section" class="tab-content">
+                <div class="section-title">
+                    <h3>Invite Friends</h3>
+                    <p>Earn <strong style="color: #00ff88;">5% Commission</strong></p>
+                </div>
+                <div class="invite-box">
+                    <p class="invite-label">Your Unique Referral Link:</p>
+                    <div class="link-row">
+                        <input type="text" id="ref-link" value="t.me/LosterFast_bot/app?startapp=12345" readonly>
+                        <button onclick="copyRefLink()">Copy</button>
+                    </div>
+                    <p class="ref-stats">Total Invited: <span id="total-refs">0</span></p>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
-<section id="tasks-section" class="tab-content">
-
-    <div class="section-title">
-        <h3>Video Tasks</h3>
-        <p>Watch ads and earn coins.</p>
-    </div>
-
-    <div class="task-card">
-
-        <div class="task-progress-container">
-            <span>Today's Videos :
-                <strong id="video-count">0</strong>
-            </span>
-
-            <span class="badge-blue">
-                +15 Coins
-            </span>
-        </div>
-
-        <button class="action-btn-large"
-        onclick="watchTaskVideo()">
-            📺 Watch Video
-        </button>
-
-    </div>
-
-</section>
-
-
-<section id="withdraw-section" class="tab-content">
-
-<div class="section-title">
-<h3>Withdraw</h3>
-<p>Minimum 1000 Coins</p>
-</div>
-
-<div class="withdraw-card">
-
-<div class="method-info">
-
-<h4>Binance Pay</h4>
-
-</div>
-
-<button class="withdraw-btn"
-onclick="openWithdrawForm('Binance')">
-Withdraw
-</button>
-
-</div>
-
-<div class="withdraw-card">
-
-<div class="method-info">
-
-<h4>FaucetPay</h4>
-
-</div>
-
-<button class="withdraw-btn"
-onclick="openWithdrawForm('FaucetPay')">
-Withdraw
-</button>
-
-</div>
-
-</section>
-
-
-<section id="invite-section"
-class="tab-content">
-
-<div class="section-title">
-
-<h3>Referral</h3>
-
-<p>Invite friends and earn 5%</p>
-
-</div>
-
-<div class="invite-box">
-
-<input
-type="text"
-id="ref-link"
-value="https://t.me/LosterFast_bot"
-readonly>
-
-<br><br>
-
-<button
-class="action-btn"
-onclick="copyRefLink()">
-
-Copy Referral Link
-
-</button>
-
-</div>
-
-</section>
-
-</main>
-
-</div>
-
-<script src="script.js"></script>
-<script src="script.js"></script>
-
-</body>
-</html>
-</body>
-
-</html><link rel="stylesheet" href="style.css">
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-<script src="//libtl.com/sdk.js"
-data-zone="11260099"
-data-sdk="show_11260099"></script>
-
-<!-- AdsGram SDK -->
-<script async src="https://sad.adsgram.ai/js/sad.min.js"></script>
