@@ -110,7 +110,7 @@ function triggerSpin() {
 }
 
 function watchVideoForSpin() {
-    alert("🎬 Loading Advertisement Video...");
+    show_11260099();
     setTimeout(() => {
         availableSpins += 1;
         alert("✅ Ad Finished! You earned +1 Spin.");
@@ -119,7 +119,7 @@ function watchVideoForSpin() {
 }
 
 function watchTaskVideo() {
-    alert("📺 Loading Task Video Ad...");
+    show_11260099();
     setTimeout(() => {
         completedVideos += 1;
         userBalance += 15;
