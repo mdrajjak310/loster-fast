@@ -1,73 +1,339 @@
-const canvas = document.getElementById("wheel-canvas");
-const ctx = canvas.getContext("2d");
-const AdController = window.Adsgram.init({ blockId: "37806" });
+const tg = window.Telegram.WebApp;
+tg.expand();
 
+// AdsGram
+const AdController = window.Adsgram.init({
+    blockId: "37806"
+});
+
+// User Data
 let userBalance = 0;
 let availableSpins = 3;
+let completedVideos = 0;
+let totalRefs = 0;
+
+// Wheel
+const canvas = document.getElementById("wheel-canvas");
+let ctx;
 let startAngle = 0;
+let arcSize;
 let isSpinning = false;
 
-// ৬টি সেক্টর: ১০(২), ১৫(২), ২০(১), ৩০(১)
+// Wheel Items
 const sectors = [
-    { label: "10", color: "#ffffff" }, // সাদা
-    { label: "15", color: "#000000" }, // কালো
-    { label: "10", color: "#ffff00" }, // হলুদ
-    { label: "15", color: "#0000ff" }, // নীল
-    { label: "20", color: "#00ff00" }, // সবুজ
-    { label: "30", color: "#8a2be2" }  // পার্পল (আপনার ডিজাইনের সাথে সামঞ্জস্যপূর্ণ)
+ {text:"10",color:"#00c8ff",reward:10},
+ {text:"15",color:"#00ff88",reward:15},
+ {text:"20",color:"#ffd93d",reward:20},
+ {text:"25",color:"#8b5cf6",reward:25},
+ {text:"MISS",color:"#222",reward:0},
+ {text:"10",color:"#ff4d4d",reward:10},
+ {text:"15",color:"#ffffff",reward:15},
+ {text:"20",color:"#3b82f6",reward:20},
+ {text:"25",color:"#16a34a",reward:25},
+ {text:"MISS",color:"#000000",reward:0}
 ];
 
-function drawWheel() {
-    const arc = (2 * Math.PI) / sectors.length;
-    ctx.clearRect(0, 0, 300, 300);
-    sectors.forEach((sector, i) => {
-        const angle = startAngle + i * arc;
-        ctx.fillStyle = sector.color;
-        ctx.beginPath();
-        ctx.moveTo(150, 150);
-        ctx.arc(150, 150, 140, angle, angle + arc);
-        ctx.lineTo(150, 150);
-        ctx.fill();
-        ctx.save();
-        ctx.fillStyle = sector.color === "#ffffff" ? "#000" : "#fff";
-        ctx.translate(150 + Math.cos(angle + arc / 2) * 100, 150 + Math.sin(angle + arc / 2) * 100);
-        ctx.rotate(angle + arc / 2 + Math.PI / 2);
-        ctx.fillText(sector.label, -10, 0);
-        ctx.restore();
-    });
+document.addEventListener("DOMContentLoaded",()=>{
+
+if(tg.initDataUnsafe.user){
+
+document.getElementById("username").innerHTML=
+"@"+(tg.initDataUnsafe.user.username ||
+tg.initDataUnsafe.user.first_name);
+
 }
 
-function triggerSpin() {
-    if (isSpinning || availableSpins <= 0) return;
-    isSpinning = true;
-    availableSpins--;
-    updateUI();
+ctx=canvas.getContext("2d");
 
-    const spinDuration = 3000;
-    const rotations = 5;
-    const finalAngle = startAngle + (rotations * 2 * Math.PI) + (Math.random() * 2 * Math.PI);
-    const startTime = Date.now();
-
-    function animate() {
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / spinDuration, 1);
-        const easeOut = 1 - Math.pow(1 - progress, 3);
-        startAngle = finalAngle * easeOut;
-        drawWheel();
-        if (progress < 1) requestAnimationFrame(animate);
-        else {
-            isSpinning = false;
-            // এখানে থামার পর ক্যালকুলেশন হবে
-            alert("🎉 স্পিন সম্পন্ন হয়েছে!");
-        }
-    }
-    animate();
-}
-
-function updateUI() {
-    document.getElementById('user-balance').innerText = userBalance;
-    document.getElementById('spin-count').innerText = availableSpins;
-}
+arcSize=(2*Math.PI)/sectors.length;
 
 drawWheel();
+
 updateUI();
+
+});
+function drawWheel(){
+
+ctx.clearRect(0,0,320,320);
+
+for(let i=0;i<sectors.length;i++){
+
+let angle=startAngle+i*arcSize;
+
+ctx.beginPath();
+
+ctx.moveTo(160,160);
+
+ctx.arc(160,160,150,angle,angle+arcSize);
+
+ctx.closePath();
+
+ctx.fillStyle=sectors[i].color;
+
+ctx.fill();
+
+ctx.strokeStyle="#111";
+
+ctx.lineWidth=2;
+
+ctx.stroke();
+
+ctx.save();
+
+ctx.translate(160,160);
+
+ctx.rotate(angle+arcSize/2);
+
+ctx.fillStyle="#fff";
+
+ctx.font="bold 18px Arial";
+
+ctx.textAlign="right";
+
+ctx.fillText(sectors[i].text,130,5);
+
+ctx.restore();
+
+}
+
+}
+
+function triggerSpin(){
+
+if(isSpinning) return;
+
+if(availableSpins<=0){
+
+alert("No Spins Left");
+
+return;
+
+}
+
+availableSpins--;
+
+updateUI();
+
+isSpinning=true;
+
+let randomSector=Math.floor(Math.random()*sectors.length);
+
+let spins=6;
+
+let stopAngle=(3*Math.PI/2)
+
+-(randomSector*arcSize)
+
+-(arcSize/2);
+
+let totalRotate=(spins*2*Math.PI)+stopAngle-startAngle;
+
+let duration=5000;
+
+let start=null;
+
+let initial=startAngle;
+
+function animate(time){
+
+if(!start) start=time;
+
+let progress=(time-start)/duration;
+
+if(progress>1) progress=1;
+
+let ease=1-Math.pow(1-progress,3);
+
+startAngle=initial+(totalRotate*ease);
+
+drawWheel();
+
+if(progress<1){
+
+requestAnimationFrame(animate);
+
+}else{
+
+isSpinning=false;
+
+let reward=sectors[randomSector].reward;
+
+if(reward>0){
+
+userBalance+=reward;
+
+alert("🎉 You won "+reward+" Coins");
+
+}else{
+
+alert("😢 MISS");
+
+}
+
+updateUI();
+
+}
+
+}
+
+requestAnimationFrame(animate);
+
+}
+function watchVideoForSpin(){
+
+show_11260099().then(()=>{
+
+availableSpins++;
+
+alert("🎉 +1 Spin Added");
+
+updateUI();
+
+}).catch(()=>{
+
+alert("❌ Ad not completed.");
+
+});
+
+}
+
+function watchTaskVideo(){
+
+show_11260099().then(()=>{
+
+completedVideos++;
+
+userBalance+=15;
+
+alert("✅ +15 Coins Earned");
+
+updateUI();
+
+}).catch(()=>{
+
+alert("❌ Ad not completed.");
+
+});
+
+}
+
+function claimDailyBonus(){
+
+show_11260099().then(()=>{
+
+userBalance+=25;
+
+alert("🎁 Daily Bonus +25 Coins");
+
+updateUI();
+
+}).catch(()=>{
+
+alert("❌ Ad not completed.");
+
+});
+
+}
+
+function updateUI(){
+
+document.getElementById("user-balance").innerHTML=userBalance;
+
+document.getElementById("spin-count").innerHTML=availableSpins;
+
+document.getElementById("video-count").innerHTML=completedVideos;
+
+const wb=document.getElementById("withdraw-balance");
+if(wb){
+wb.innerHTML=userBalance;
+}
+
+const spinBtn=document.getElementById("spin-btn");
+
+if(spinBtn){
+
+spinBtn.disabled=availableSpins<=0;
+
+}
+
+function openWithdrawForm(gateway){
+
+    if(userBalance < 1000){
+        alert("❌ Minimum Withdraw is 1000 Coins");
+        return;
+    }
+
+    let address = prompt(
+        gateway === "Binance"
+        ? "Enter Binance Pay ID"
+        : "Enter FaucetPay Email"
+    );
+
+    if(address==null || address==""){
+        return;
+    }
+
+    alert(
+        "✅ Withdraw Request Submitted\n\n" +
+        "Gateway : " + gateway +
+        "\nAmount : 1000 Coins" +
+        "\nStatus : Pending"
+    );
+
+    userBalance -= 1000;
+
+    updateUI();
+
+}
+
+function copyRefLink(){
+
+    let link=document.getElementById("ref-link");
+
+    navigator.clipboard.writeText(link.value);
+
+    alert("✅ Referral Link Copied");
+
+}
+
+function shareReferral(){
+
+    if(navigator.share){
+
+        navigator.share({
+
+            title:"LOSTER FAST",
+
+            text:"Join LOSTER FAST and earn USDT!",
+
+            url:document.getElementById("ref-link").value
+
+        });
+
+    }else{
+
+        copyRefLink();
+
+    }
+
+}
+
+function switchTab(tab){
+
+document.querySelectorAll(".tab-content").forEach(e=>{
+
+e.classList.remove("active");
+
+});
+
+document.getElementById(tab).classList.add("active");
+
+document.querySelectorAll(".nav-item").forEach(btn=>{
+
+btn.classList.remove("active");
+
+});
+
+event.target.classList.add("active");
+
+}
