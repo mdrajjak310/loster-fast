@@ -110,12 +110,14 @@ function triggerSpin() {
 }
 
 function watchVideoForSpin() {
-    show_11260099();
-    setTimeout(() => {
+    show_11260099().then((result) => {
         availableSpins += 1;
-        alert("✅ Ad Finished! You earned +1 Spin.");
+        alert("Ad Finished! You earned +1 Spin.");
         updateUI();
-    }, 3000);
+    }).catch((error) => {
+        console.error("Ad failed, rejected, or timed out", error);
+        alert("❌ Ad failed to load. Please try again.");
+    });
 }
 
 function watchTaskVideo() {
