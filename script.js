@@ -1,5 +1,6 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
+
 let userBalance = 0;
 let availableSpins = 2;
 let completedVideos = 0;
