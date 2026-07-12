@@ -1,21 +1,5 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyDF8cpTgTFM40FehNd1VG3qCFvnvhxqM",
-    authDomain: "myfastapp-67358.firebaseapp.com",
-    databaseURL: "https://myfastapp-67358.firebaseio.com",
-    projectId: "myfastapp-67358",
-    storageBucket: "myfastapp-67358.appspot.com",
-    messagingSenderId: "627059107646",
-    appId: "1:627059107646:web:beba3f4790ecc9b4ac6e6f",
-    measurementId: "G-V23WC40NP5"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 let userBalance = 0;
 let availableSpins = 2;
 let completedVideos = 0;
