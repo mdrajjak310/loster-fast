@@ -1,27 +1,5 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDF8cpTgTFM4OFehNd1VGh3SQcFVnvhxqM",
-  authDomain: "myfastapp-67358.firebaseapp.com",
-  databaseURL: "https://myfastapp-67358.firebaseio.com",
-  projectId: "myfastapp-67358",
-  storageBucket: "myfastapp-67358.firebasestorage.app",
-  messagingSenderId: "627059107646",
-  appId: "1:627059107646:web:beba3f4790ecc9b4ac6e6f",
-  measurementId: "G-V23WC40NP5"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 let userBalance = 0;
 let availableSpins = 2;
 let completedVideos = 0;
